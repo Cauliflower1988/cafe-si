@@ -11,7 +11,9 @@
 		http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
 
 	<!-- Spring's GatewayProxyFactoryBean will create a gateway bean for this interface -->
-	<int:gateway id="cafe" service-interface="org.springframework.integration.samples.cafe.Cafe" default-request-channel="orders"/>
+	<int:gateway id="cafe" service-interface="org.springframework.integration.samples.cafe.Cafe">
+		<int:method name="placeOrder" request-channel="orders"/>
+	</int:gateway>
 
 	<!-- each order has a collection of order items that is split apart to be processed -->
 	<int:channel id="orders"/>
