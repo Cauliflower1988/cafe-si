@@ -15,9 +15,17 @@
 		<int:method name="placeOrder" request-channel="orders"/>
 	</int:gateway>
 
+	<int:channel id="orders">
+		<int:interceptors>
+			<int:wire-tap channel="logger"/>
+		</int:interceptors>
+	</int:channel>
+
+	<int:logging-channel-adapter id="logger" level="INFO"/>
+
 	<!-- each order has a collection of order items that is split apart to be processed -->
-	<int:channel id="orders"/>
 	<int:splitter input-channel="orders" expression="payload.items" output-channel="drinks"/>
+	
 
 	<!-- The router sends different drink orders on different paths -->
 	<int:channel id="drinks"/>
