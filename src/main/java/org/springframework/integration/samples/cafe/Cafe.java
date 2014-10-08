@@ -16,7 +16,6 @@
 
 package org.springframework.integration.samples.cafe;
 
-import org.springframework.integration.annotation.Gateway;
 
 /**
  * The entry point for the Cafe Demo. The demo's main() method invokes the
@@ -30,7 +29,6 @@ import org.springframework.integration.annotation.Gateway;
  */
 public interface Cafe {
 
-	@Gateway(requestChannel="orders")
 	void placeOrder(Order order);
 
 }
