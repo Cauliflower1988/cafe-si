@@ -28,7 +28,7 @@ public class Delivery implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String SEPARATOR = "-----------------------";
+	private static final String SEPARATOR = "YYYYYYYYYYYYYYYYYYYYYYYYYYY";
 
 	private List<Drink> deliveredDrinks;
 
@@ -63,7 +63,7 @@ public class Delivery implements Serializable{
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer(SEPARATOR + "\n");
-		buffer.append("Order #" + getOrderNumber() + "\n");
+		buffer.append("Order #" + getOrderNumber() + " has been delivered\n");
 		for (Drink drink : getDeliveredDrinks()) {
 			buffer.append(drink);
 			buffer.append("\n");

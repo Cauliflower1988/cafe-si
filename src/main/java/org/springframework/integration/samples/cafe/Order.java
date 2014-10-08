@@ -30,6 +30,8 @@ public class Order implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String SEPARATOR = ". . . . . . . . . . . .";
+
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	/** the order number used for tracking */
@@ -61,4 +63,17 @@ public class Order implements Serializable{
 	public void setItems(List<OrderItem> orderItems) {
 		this.orderItems = orderItems;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuffer buffer = new StringBuffer("\n" + SEPARATOR + "\n");
+		buffer.append("Order #" + getNumber() + " placed\n");
+		for (OrderItem item : getItems()) {
+			buffer.append(item);
+			buffer.append("\n");
+		}
+		buffer.append(SEPARATOR + "\n");
+		return buffer.toString();
+	}
+
 }
