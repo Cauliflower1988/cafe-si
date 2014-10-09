@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Order>
+	<items>
+		<Item>
+			<type>LATTE</type>
+			<shots>2</shots>
+			<iced>false</iced>
+			<orderNumber>1</orderNumber>
+		</Item>
+		<Item>
+			<type>MOCHA</type>
+			<shots>3</shots>
+			<iced>true</iced>
+			<orderNumber>1</orderNumber>
+		</Item>
+	</items>
+	<number>1</number>
+</Order>
