@@ -25,9 +25,18 @@
 
 
 	<int-jms:channel id="XMLOrders" queue-name="cafe.orders" />
-	
-	<int-xml:unmarshalling-transformer unmarshaller="jaxb-marshaller" input-channel="XMLOrders" output-channel="orders" />
-	
+
+	<int:chain input-channel="XMLOrders" output-channel="orders">
+
+		<!-- Split the order into items creating a new message for each item node -->
+		<int-xml:xpath-splitter>
+			<int-xml:xpath-expression expression="/orders/Order"/>
+		</int-xml:xpath-splitter>
+
+		<!-- Create and Order object instance from each <Order> XML element -->
+		<int-xml:unmarshalling-transformer unmarshaller="jaxb-marshaller"/>
+	</int:chain>
+
 	<int:channel id="orders">
 		<int:interceptors>
 			<int:wire-tap channel="logger"/>
