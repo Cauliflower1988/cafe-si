@@ -20,21 +20,32 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Mark Fisher
  * @author Marius Bogoevici
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
+@XmlRootElement(name="Order")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Order implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String SEPARATOR = ". . . . . . . . . . . .";
 
+	@XmlElement(name="Item")
+	@XmlElementWrapper(name = "items")
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	/** the order number used for tracking */
+	@XmlElement
 	private int number;
 
 	// Default constructor required by Jackson Java JSON-processor
@@ -46,6 +57,11 @@ public class Order implements Serializable{
 
 	public void addItem(DrinkType drinkType, int shots, boolean iced) {
 		this.orderItems.add(new OrderItem(this.number, drinkType, shots, iced));
+	}
+
+	public void addItem(OrderItem item) {
+		item.setOrderNumber(getNumber());
+		this.orderItems.add(item);
 	}
 
 	public int getNumber() {

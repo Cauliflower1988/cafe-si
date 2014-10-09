@@ -18,9 +18,6 @@ package org.springframework.integration.samples.cafe.xml;
 
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.integration.samples.cafe.Cafe;
-import org.springframework.integration.samples.cafe.DrinkType;
-import org.springframework.integration.samples.cafe.Order;
 
 /**
  * Provides the 'main' method for running the Cafe Demo application. When an
@@ -41,13 +38,5 @@ public class CafeDemoApp {
 		AbstractApplicationContext context =
 			new ClassPathXmlApplicationContext("/META-INF/spring/integration/cafeDemo-xml.xml", CafeDemoApp.class);
 
-		Cafe cafe = (Cafe) context.getBean("cafe");
-		for (int i = 1; i <= 100; i++) {
-			Order order = new Order(i);
-			order.addItem(DrinkType.LATTE, 2, false);
-			order.addItem(DrinkType.MOCHA, 3, true);
-			cafe.placeOrder(order);
-		}
-		context.close();
 	}
 }

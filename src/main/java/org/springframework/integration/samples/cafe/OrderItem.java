@@ -18,20 +18,30 @@ package org.springframework.integration.samples.cafe;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author Mark Fisher
  * @author Marius Bogoevici
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
+@XmlRootElement(name="Item")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class OrderItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@XmlElement
 	private DrinkType type;
 
+	@XmlElement
 	private int shots = 1;
 
+	@XmlElement
 	private boolean iced = false;
 
 	/** the order this item is tied to */
