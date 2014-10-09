@@ -18,21 +18,35 @@ package org.springframework.integration.samples.cafe;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * @author Marius Bogoevici
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
+@XmlRootElement(name="Drink")
+@XmlType(propOrder={"drinkType", "shots", "iced"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Drink implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	@XmlElement
 	private boolean iced;
 
+	@XmlElement
 	private int shots;
 
+	@XmlElement(name="type")
 	private DrinkType drinkType;
 
+	@XmlTransient
 	private int orderNumber;
 
 	// Default constructor required by Jackson Java JSON-processor

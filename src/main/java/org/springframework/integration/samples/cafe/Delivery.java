@@ -19,19 +19,32 @@ package org.springframework.integration.samples.cafe;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * @author Marius Bogoevici
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
+@XmlRootElement(name="Delivery")
+@XmlType(propOrder={"orderNumber","deliveredDrinks"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Delivery implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String SEPARATOR = "YYYYYYYYYYYYYYYYYYYYYYYYYYY";
 
+	@XmlElement(name="Drink")
+	@XmlElementWrapper(name = "drinks")
 	private List<Drink> deliveredDrinks;
 
+	@XmlElement
 	private int orderNumber;
 
 	// Default constructor required by Jackson Java JSON-processor
@@ -62,7 +75,7 @@ public class Delivery implements Serializable{
 
 	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer(SEPARATOR + "\n");
+		StringBuffer buffer = new StringBuffer("\n" + SEPARATOR + "\n");
 		buffer.append("Order #" + getOrderNumber() + " has been delivered\n");
 		for (Drink drink : getDeliveredDrinks()) {
 			buffer.append(drink);

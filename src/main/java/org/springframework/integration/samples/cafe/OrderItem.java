@@ -22,6 +22,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * @author Mark Fisher
@@ -30,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Gunnar Hillert
  */
 @XmlRootElement(name="Item")
+@XmlType(propOrder={"orderNumber", "type","shots", "iced"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class OrderItem implements Serializable {
 
@@ -45,6 +48,7 @@ public class OrderItem implements Serializable {
 	private boolean iced = false;
 
 	/** the order this item is tied to */
+	@XmlElement
 	private int orderNumber;
 
 	// Default constructor required by Jackson Java JSON-processor

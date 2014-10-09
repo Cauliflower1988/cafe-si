@@ -6,6 +6,7 @@
 	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
 	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
 	xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration
@@ -17,38 +18,15 @@
 		http://www.springframework.org/schema/integration/jms 
 		http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd 
 		http://activemq.apache.org/schema/core 
-		http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd">
+		http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util.xsd">
 
 
-	<amq:broker brokerName="cafe-broker">
-		<amq:transportConnectors>
-			<amq:transportConnector name="openwire" uri="tcp://localhost:61616"/>
-		</amq:transportConnectors>
-		<amq:plugins>
-			<amq:statisticsBrokerPlugin/>
-		</amq:plugins>
-	</amq:broker>
 
-	<!-- Set up the connection factory. You must name the bean "connectionFactory" for the JMS-backed
-	channels to automatically find it. Otherwise, you must specify the connection when you declare the
-	channel -->
-	<beans:bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
-		<beans:property name="targetConnectionFactory">
-			<beans:bean class="org.apache.activemq.ActiveMQConnectionFactory">
-				<beans:property name="brokerURL" value="tcp://localhost:61616"/>
-			</beans:bean>
-		</beans:property>
-		<beans:property name="sessionCacheSize" value="10"/>
-		<beans:property name="cacheProducers" value="false"/>
-	</beans:bean>
-
-	<int-jms:channel id="XMLOrders" queue-name="org.springframework.integration.samples.cafe.xmlorders" />
-
-	<beans:bean id="jaxb-unmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-		<beans:property name="contextPath" value="org.springframework.integration.samples.cafe" />
-	</beans:bean>
+	<int-jms:channel id="XMLOrders" queue-name="cafe.orders" />
 	
-	<int-xml:unmarshalling-transformer unmarshaller="jaxb-unmarshaller" input-channel="XMLOrders" output-channel="orders" />
+	<int-xml:unmarshalling-transformer unmarshaller="jaxb-marshaller" input-channel="XMLOrders" output-channel="orders" />
 	
 	<int:channel id="orders">
 		<int:interceptors>
@@ -84,7 +62,56 @@
 		<beans:bean class="org.springframework.integration.samples.cafe.xml.Waiter"/>
 	</int:aggregator>
 
-	<int-stream:stdout-channel-adapter id="deliveries"/>
+	<int:channel id="deliveries">
+		<int:interceptors>
+			<int:wire-tap channel="logger"/>
+		</int:interceptors>
+	</int:channel>
+	
+	<int-xml:marshalling-transformer marshaller="jaxb-marshaller" result-transformer="marshallingTransformer" input-channel="deliveries" output-channel="XMLDeliveries" />
+	
+	<int:channel id="XMLDeliveries" />
+	<int-jms:outbound-channel-adapter channel="XMLDeliveries" destination-name="cafe.deliveries"></int-jms:outbound-channel-adapter>
+	
+
+
+	<amq:broker brokerName="cafe-broker">
+		<amq:transportConnectors>
+			<amq:transportConnector name="openwire" uri="tcp://localhost:61616"/>
+		</amq:transportConnectors>
+		<amq:plugins>
+			<amq:statisticsBrokerPlugin/>
+		</amq:plugins>
+		<amq:destinations>
+			<amq:queue name="cafe.deliveries" physicalName="cafe.deliveries"/>	
+		</amq:destinations>
+	</amq:broker>
+	
+	<!-- Set up the connection factory. You must name the bean "connectionFactory" for the JMS-backed
+	channels to automatically find it. Otherwise, you must specify the connection when you declare the
+	channel -->
+	<beans:bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+		<beans:property name="targetConnectionFactory">
+			<beans:bean class="org.apache.activemq.ActiveMQConnectionFactory">
+				<beans:property name="brokerURL" value="tcp://localhost:61616"/>
+			</beans:bean>
+		</beans:property>
+		<beans:property name="sessionCacheSize" value="10"/>
+		<beans:property name="cacheProducers" value="false"/>
+	</beans:bean>
+
+	<beans:bean id="jaxb-marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+		<beans:property name="contextPath" value="org.springframework.integration.samples.cafe" />
+	</beans:bean>
+	
+	<beans:bean id="marshallingTransformer" class="org.springframework.integration.xml.transformer.ResultToStringTransformer">
+    	<beans:property name="outputProperties">
+	    	<beans:props>
+		    	<beans:prop key="indent">yes</beans:prop>
+		    	<beans:prop key="{http://xml.apache.org/xslt}indent-amount">4</beans:prop>
+    		</beans:props>
+    	</beans:property>
+	</beans:bean>
 
 	<beans:bean id="barista" class="org.springframework.integration.samples.cafe.xml.Barista"/>
 
