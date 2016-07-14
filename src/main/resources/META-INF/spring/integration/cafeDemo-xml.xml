@@ -5,6 +5,7 @@
 	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
 	xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
 	xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+    xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
 	xmlns:amq="http://activemq.apache.org/schema/core"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -16,7 +17,9 @@
 		http://www.springframework.org/schema/integration/xml
 		http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd 
 		http://www.springframework.org/schema/integration/jms 
-		http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd 
+		http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+		http://www.springframework.org/schema/integration/mail
+		http://www.springframework.org/schema/integration/mail/spring-integration-mail.xsd
 		http://activemq.apache.org/schema/core 
 		http://activemq.apache.org/schema/core/activemq-core-5.4.2.xsd
 		http://www.springframework.org/schema/util 
@@ -74,6 +77,7 @@
 	<int:channel id="deliveries">
 		<int:interceptors>
 			<int:wire-tap channel="logger"/>
+            <int:wire-tap channel="outboundMail" />
 		</int:interceptors>
 	</int:channel>
 	
@@ -81,7 +85,20 @@
 	
 	<int:channel id="XMLDeliveries" />
 	<int-jms:outbound-channel-adapter channel="XMLDeliveries" destination-name="cafe.deliveries"></int-jms:outbound-channel-adapter>
-	
+
+
+
+    <int:channel id="outboundMail">
+    </int:channel>
+    <int:chain input-channel="outboundMail" output-channel="outbox">
+        <int:object-to-string-transformer />
+        <int-mail:header-enricher>
+            <int-mail:from value="Cafe@myhost.com" />
+            <int-mail:to value="blabla@myhost.com" />
+        </int-mail:header-enricher>
+    </int:chain>
+    <int:channel id="outbox" />
+    <int-mail:outbound-channel-adapter channel="outbox" host="localhost" />
 
 
 	<amq:broker brokerName="cafe-broker">
