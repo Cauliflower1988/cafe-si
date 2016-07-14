@@ -3,12 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration
 		http://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/integration/stream
-		http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
+		http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<!-- Spring's GatewayProxyFactoryBean will create a gateway bean for this interface -->
 	<int:gateway id="cafe" service-interface="org.springframework.integration.samples.cafe.Cafe">
@@ -41,7 +43,10 @@
 	<int:channel id="hotDrinks">
 		<int:queue capacity="10"/>
 	</int:channel>
-	<int:service-activator input-channel="hotDrinks" ref="barista" method="prepareHotDrink" output-channel="preparedDrinks"/>
+	<int:service-activator input-channel="hotDrinks" ref="barista" method="prepareHotDrink" output-channel="preparedDrinks">
+        <int:poller task-executor="pool" fixed-rate="1000" />
+    </int:service-activator>
+    <task:executor id="pool" pool-size="5" />
 
 	<!-- drink order items are aggregated in a call to the waiter -->
 	<int:channel id="preparedDrinks"/>

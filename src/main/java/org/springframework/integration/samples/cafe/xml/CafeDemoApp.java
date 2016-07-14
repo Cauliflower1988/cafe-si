@@ -41,6 +41,8 @@ public class CafeDemoApp {
 		AbstractApplicationContext context =
 			new ClassPathXmlApplicationContext("/META-INF/spring/integration/cafeDemo-xml.xml", CafeDemoApp.class);
 
+		context.registerShutdownHook();
+
 		Cafe cafe = (Cafe) context.getBean("cafe");
 		for (int i = 1; i <= 100; i++) {
 			Order order = new Order(i);
@@ -48,6 +50,5 @@ public class CafeDemoApp {
 			order.addItem(DrinkType.MOCHA, 3, true);
 			cafe.placeOrder(order);
 		}
-		context.close();
 	}
 }
