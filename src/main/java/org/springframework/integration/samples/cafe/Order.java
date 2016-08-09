@@ -22,9 +22,9 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -44,7 +44,10 @@ public class Order implements Serializable{
 	private static final String SEPARATOR = ". . . . . . . . . . . .";
 
 	@XmlElementWrapper(name = "items")
-	@XmlAnyElement(lax = true)
+    @XmlElements({
+            @XmlElement(name = "Drink", type = DrinkOrderItem.class),
+            @XmlElement(name = "Food", type = FoodOrderItem.class)
+    })
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	/** the order number used for tracking */

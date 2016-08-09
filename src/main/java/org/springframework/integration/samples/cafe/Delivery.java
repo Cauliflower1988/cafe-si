@@ -21,8 +21,10 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -33,18 +35,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name="Delivery")
 @XmlType(propOrder={"orderNumber","deliveredItems"})
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class Delivery implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String SEPARATOR = "YYYYYYYYYYYYYYYYYYYYYYYYYYY";
 
-	@XmlElement(name="Item")
-	@XmlElementWrapper(name = "items")
 	private List<OrderItem> deliveredItems;
 
-	@XmlElement
 	private int orderNumber;
 
 	// Default constructor required by Jackson Java JSON-processor
@@ -57,6 +56,7 @@ public class Delivery implements Serializable{
 	}
 
 
+	@XmlElement(name = "orderNumber")
 	public int getOrderNumber() {
 		return orderNumber;
 	}
@@ -65,6 +65,11 @@ public class Delivery implements Serializable{
 		this.orderNumber = orderNumber;
 	}
 
+	@XmlElementWrapper(name = "items")
+	@XmlElements({
+			@XmlElement(name = "Drink", type = Drink.class),
+			@XmlElement(name = "Food", type = Sandwich.class)
+	})
 	public List<OrderItem> getDeliveredItems() {
 		return deliveredItems;
 	}

@@ -50,13 +50,10 @@
 
     <!-- separate routes for food items and drink items -->
     <int:channel id="food-drink-router" />
-	<int:router input-channel="food-drink-router" ref="myRouter" />
-	<!--
     <int:payload-type-router input-channel="food-drink-router">
         <int:mapping type="org.springframework.integration.samples.cafe.DrinkOrderItem" channel="drinks" />
         <int:mapping type="org.springframework.integration.samples.cafe.FoodOrderItem" channel="bites" />
     </int:payload-type-router>
-    -->
 
 	<!-- The router sends different drink orders on different paths -->
 	<int:channel id="drinks"/>
@@ -128,7 +125,16 @@
 	</beans:bean>
 
 	<beans:bean id="jaxb-marshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-		<beans:property name="contextPath" value="org.springframework.integration.samples.cafe" />
+        <beans:property name="classesToBeBound">
+            <beans:list>
+                <beans:value>org.springframework.integration.samples.cafe.DrinkOrderItem</beans:value>
+                <beans:value>org.springframework.integration.samples.cafe.FoodOrderItem</beans:value>
+                <beans:value>org.springframework.integration.samples.cafe.Drink</beans:value>
+                <beans:value>org.springframework.integration.samples.cafe.Sandwich</beans:value>
+                <beans:value>org.springframework.integration.samples.cafe.Order</beans:value>
+                <beans:value>org.springframework.integration.samples.cafe.Delivery</beans:value>
+            </beans:list>
+        </beans:property>
 	</beans:bean>
 	
 	<beans:bean id="marshallingTransformer" class="org.springframework.integration.xml.transformer.ResultToStringTransformer">
@@ -143,11 +149,6 @@
 	<beans:bean id="barista" class="org.springframework.integration.samples.cafe.xml.Barista"/>
 
     <beans:bean id="chef" class="org.springframework.integration.samples.cafe.xml.Chef"/>
-
-	<beans:bean id="myRouter" class="org.springframework.integration.samples.cafe.MyRouter">
-		<beans:property name="drinks" ref="drinks" />
-		<beans:property name="bites" ref="bites" />
-	</beans:bean>
 
 	<int:poller id="poller" default="true" fixed-delay="1000"/>
 

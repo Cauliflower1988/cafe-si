@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
-@XmlRootElement(name="Sandwich")
+@XmlRootElement(name="Food")
 @XmlType(propOrder={"description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Sandwich implements OrderItem {
