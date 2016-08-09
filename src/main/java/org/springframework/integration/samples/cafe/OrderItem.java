@@ -16,14 +16,12 @@
 
 package org.springframework.integration.samples.cafe;
 
+import com.sun.xml.internal.bind.AnyTypeAdapter;
+
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * @author Mark Fisher
@@ -31,70 +29,11 @@ import javax.xml.bind.annotation.XmlType;
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
-@XmlRootElement(name="Item")
-@XmlType(propOrder={"orderNumber", "type","shots", "iced"})
-@XmlAccessorType(XmlAccessType.FIELD)
-public class OrderItem implements Serializable {
+@XmlJavaTypeAdapter(AnyTypeAdapter.class)
+public interface OrderItem extends Serializable {
 
-	private static final long serialVersionUID = 1L;
+	public int getOrderNumber();
 
-	@XmlElement
-	private DrinkType type;
-
-	@XmlElement
-	private int shots = 1;
-
-	@XmlElement
-	private boolean iced = false;
-
-	/** the order this item is tied to */
-	@XmlElement
-	private int orderNumber;
-
-	// Default constructor required by Jackson Java JSON-processor
-	public OrderItem() {}
-
-	public OrderItem(int orderNumber, DrinkType type, int shots, boolean iced) {
-		this.orderNumber = orderNumber;
-		this.type = type;
-		this.shots = shots;
-		this.iced = iced;
-	}
-
-	public int getOrderNumber() {
-		return this.orderNumber;
-	}
-
-	public void setOrderNumber(int orderNumber) {
-		this.orderNumber = orderNumber;
-	}
-
-	public boolean isIced() {
-		return this.iced;
-	}
-
-	public void setIced(boolean iced) {
-		this.iced = iced;
-	}
-
-	public int getShots() {
-		return shots;
-	}
-
-	public void setShots(int shots) {
-		this.shots = shots;
-	}
-
-	public DrinkType getDrinkType() {
-		return this.type;
-	}
-
-	public void setDrinkType(DrinkType type) {
-		this.type = type;
-	}
-
-	public String toString() {
-		return ((this.iced) ? "iced " : "hot ") + this.shots + " shot " + this.type;
-	}
+	public void setOrderNumber(int orderNumber);
 
 }

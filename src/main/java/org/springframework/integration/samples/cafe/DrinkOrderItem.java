@@ -19,47 +19,48 @@ package org.springframework.integration.samples.cafe;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
+ * @author Mark Fisher
  * @author Marius Bogoevici
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
 @XmlRootElement(name="Drink")
-@XmlType(propOrder={"drinkType", "shots", "iced"})
+@XmlType(propOrder={"orderNumber", "type","shots", "iced"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Drink implements OrderItem {
+public class DrinkOrderItem implements OrderItem {
 
 	private static final long serialVersionUID = 1L;
 
 	@XmlElement
-	private boolean iced;
+	private DrinkType type;
 
 	@XmlElement
-	private int shots;
+	private int shots = 1;
 
-	@XmlElement(name="type")
-	private DrinkType drinkType;
+	@XmlElement
+	private boolean iced = false;
 
-	@XmlTransient
+	/** the order this item is tied to */
+	@XmlElement
 	private int orderNumber;
 
 	// Default constructor required by Jackson Java JSON-processor
-	public Drink() {}
+	public DrinkOrderItem() {}
 
-	public Drink(int orderNumber, DrinkType drinkType, boolean iced, int shots) {
+	public DrinkOrderItem(int orderNumber, DrinkType type, int shots, boolean iced) {
 		this.orderNumber = orderNumber;
-		this.drinkType = drinkType;
-		this.iced = iced;
+		this.type = type;
 		this.shots = shots;
+		this.iced = iced;
 	}
 
-
 	public int getOrderNumber() {
-		return orderNumber;
+		return this.orderNumber;
 	}
 
 	public void setOrderNumber(int orderNumber) {
@@ -74,25 +75,24 @@ public class Drink implements OrderItem {
 		this.iced = iced;
 	}
 
-	public DrinkType getDrinkType() {
-		return this.drinkType;
-	}
-
-	public void setDrinkType(DrinkType drinkType) {
-		this.drinkType = drinkType;
-	}
-
 	public int getShots() {
-		return this.shots;
+		return shots;
 	}
 
 	public void setShots(int shots) {
 		this.shots = shots;
 	}
 
-	@Override
+	public DrinkType getDrinkType() {
+		return this.type;
+	}
+
+	public void setDrinkType(DrinkType type) {
+		this.type = type;
+	}
+
 	public String toString() {
-		return (iced?"Iced":"Hot")  + " " + drinkType.toString() + ", " + shots + " shots.";
+		return ((this.iced) ? "iced " : "hot ") + this.shots + " shot " + this.type;
 	}
 
 }

@@ -20,14 +20,15 @@ import java.util.List;
 
 import org.springframework.integration.samples.cafe.Delivery;
 import org.springframework.integration.samples.cafe.Drink;
+import org.springframework.integration.samples.cafe.OrderItem;
 
 /**
  * @author Marius Bogoevici
  */
 public class Waiter {
 
-	public Delivery prepareDelivery(List<Drink> drinks) {
-		return new Delivery(drinks);
+	public Delivery prepareDelivery(List<OrderItem> items) {
+		return new Delivery(items);
 	}
 
 }

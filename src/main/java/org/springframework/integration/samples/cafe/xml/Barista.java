@@ -19,6 +19,7 @@ package org.springframework.integration.samples.cafe.xml;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.integration.samples.cafe.Drink;
+import org.springframework.integration.samples.cafe.DrinkOrderItem;
 import org.springframework.integration.samples.cafe.OrderItem;
 import org.apache.log4j.Logger;
 
@@ -47,7 +48,7 @@ public class Barista {
 		this.coldDrinkDelay = coldDrinkDelay;
 	}
 
-	public Drink prepareHotDrink(OrderItem orderItem) {
+	public Drink prepareHotDrink(DrinkOrderItem orderItem) {
 		try {
 			Thread.sleep(this.hotDrinkDelay);
 			logger.info(Thread.currentThread().getName()
@@ -61,7 +62,7 @@ public class Barista {
 		}
 	}
 
-	public Drink prepareColdDrink(OrderItem orderItem) {
+	public Drink prepareColdDrink(DrinkOrderItem orderItem) {
 		try {
 			Thread.sleep(this.coldDrinkDelay);
 			logger.info(Thread.currentThread().getName()

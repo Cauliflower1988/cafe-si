@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,8 +43,8 @@ public class Order implements Serializable{
 
 	private static final String SEPARATOR = ". . . . . . . . . . . .";
 
-	@XmlElement(name="Item")
 	@XmlElementWrapper(name = "items")
+	@XmlAnyElement(lax = true)
 	private List<OrderItem> orderItems = new ArrayList<OrderItem>();
 
 	/** the order number used for tracking */
@@ -57,11 +58,15 @@ public class Order implements Serializable{
 		this.number = number;
 	}
 
-	public void addItem(DrinkType drinkType, int shots, boolean iced) {
-		this.orderItems.add(new OrderItem(this.number, drinkType, shots, iced));
+	public void addDrinkItem(DrinkType drinkType, int shots, boolean iced) {
+		this.orderItems.add(new DrinkOrderItem(this.number, drinkType, shots, iced));
 	}
 
-	public void addItem(OrderItem item) {
+    public void addFoodItem(String description) {
+        this.orderItems.add(new FoodOrderItem(this.number, description));
+    }
+
+    public void addItem(OrderItem item) {
 		item.setOrderNumber(getNumber());
 		this.orderItems.add(item);
 	}

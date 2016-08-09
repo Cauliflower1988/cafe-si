@@ -3,64 +3,68 @@
 	<Order>
 		<number>1</number>
 		<items>
-			<Item>
+			<Drink>
 				<type>ESPRESSO</type>
 				<shots>2</shots>
 				<iced>false</iced>
 				<orderNumber>1</orderNumber>
-			</Item>
-			<Item>
+			</Drink>
+			<Drink>
 				<type>CAPPUCCINO</type>
 				<shots>1</shots>
 				<iced>false</iced>
 				<orderNumber>1</orderNumber>
-			</Item>
-			<Item>
+			</Drink>
+			<Drink>
 				<type>LATTE</type>
 				<shots>2</shots>
 				<iced>false</iced>
 				<orderNumber>1</orderNumber>
-			</Item>
-			<Item>
+			</Drink>
+			<Drink>
 				<type>MOCHA</type>
 				<shots>3</shots>
 				<iced>true</iced>
 				<orderNumber>1</orderNumber>
-			</Item>
+			</Drink>
 		</items>
 	</Order>
 	<Order>
 		<number>2</number>
 		<items>
-			<Item>
+			<Drink>
 				<type>ESPRESSO</type>
 				<shots>2</shots>
 				<iced>false</iced>
 				<orderNumber>2</orderNumber>
-			</Item>
-			<Item>
+			</Drink>
+			<Drink>
 				<type>CAPPUCCINO</type>
 				<shots>1</shots>
 				<iced>false</iced>
 				<orderNumber>2</orderNumber>
-			</Item>
+			</Drink>
 		</items>
 	</Order>
 	<Order>
 		<number>3</number>
 		<items>
-			<Item>
+			<Drink>
 				<type>LATTE</type>
 				<shots>2</shots>
 				<iced>false</iced>
 				<orderNumber>3</orderNumber>
-			</Item>
-			<Item>
+			</Drink>
+			<Drink>
 				<type>MOCHA</type>
 				<shots>3</shots>
 				<iced>true</iced>
 				<orderNumber>3</orderNumber>
-			</Item>
+			</Drink>
+			<Food>
+				<description>Ham Sandwich</description>
+				<orderNumber>3</orderNumber>
+			</Food>
 		</items>
 	</Order>
 </orders>

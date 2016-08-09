@@ -28,33 +28,25 @@ import javax.xml.bind.annotation.XmlType;
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
-@XmlRootElement(name="Drink")
-@XmlType(propOrder={"drinkType", "shots", "iced"})
+@XmlRootElement(name="Sandwich")
+@XmlType(propOrder={"description"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Drink implements OrderItem {
+public class Sandwich implements OrderItem {
 
 	private static final long serialVersionUID = 1L;
 
 	@XmlElement
-	private boolean iced;
-
-	@XmlElement
-	private int shots;
-
-	@XmlElement(name="type")
-	private DrinkType drinkType;
+	private String description;
 
 	@XmlTransient
 	private int orderNumber;
 
 	// Default constructor required by Jackson Java JSON-processor
-	public Drink() {}
+	public Sandwich() {}
 
-	public Drink(int orderNumber, DrinkType drinkType, boolean iced, int shots) {
+	public Sandwich(int orderNumber, String description) {
 		this.orderNumber = orderNumber;
-		this.drinkType = drinkType;
-		this.iced = iced;
-		this.shots = shots;
+		this.description = description;
 	}
 
 
@@ -66,33 +58,17 @@ public class Drink implements OrderItem {
 		this.orderNumber = orderNumber;
 	}
 
-	public boolean isIced() {
-		return this.iced;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setIced(boolean iced) {
-		this.iced = iced;
-	}
-
-	public DrinkType getDrinkType() {
-		return this.drinkType;
-	}
-
-	public void setDrinkType(DrinkType drinkType) {
-		this.drinkType = drinkType;
-	}
-
-	public int getShots() {
-		return this.shots;
-	}
-
-	public void setShots(int shots) {
-		this.shots = shots;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return (iced?"Iced":"Hot")  + " " + drinkType.toString() + ", " + shots + " shots.";
+		return "Sandwich " + description;
 	}
 
 }

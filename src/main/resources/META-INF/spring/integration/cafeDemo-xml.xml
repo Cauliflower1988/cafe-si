@@ -46,8 +46,17 @@
 	<int:logging-channel-adapter id="logger" level="INFO"/>
 
 	<!-- each order has a collection of order items that is split apart to be processed -->
-	<int:splitter input-channel="orders" expression="payload.items" output-channel="drinks"/>
-	
+	<int:splitter input-channel="orders" expression="payload.items" output-channel="food-drink-router"/>
+
+    <!-- separate routes for food items and drink items -->
+    <int:channel id="food-drink-router" />
+	<int:router input-channel="food-drink-router" ref="myRouter" />
+	<!--
+    <int:payload-type-router input-channel="food-drink-router">
+        <int:mapping type="org.springframework.integration.samples.cafe.DrinkOrderItem" channel="drinks" />
+        <int:mapping type="org.springframework.integration.samples.cafe.FoodOrderItem" channel="bites" />
+    </int:payload-type-router>
+    -->
 
 	<!-- The router sends different drink orders on different paths -->
 	<int:channel id="drinks"/>
@@ -57,19 +66,27 @@
 	<int:channel id="coldDrinks">
 		<int:queue capacity="10"/>
 	</int:channel>
-	<int:service-activator input-channel="coldDrinks" ref="barista" method="prepareColdDrink" output-channel="preparedDrinks"/>
+	<int:service-activator input-channel="coldDrinks" ref="barista" method="prepareColdDrink" output-channel="preparedItems"/>
 
 	<!-- individual order items are processed by the barista -->
 	<int:channel id="hotDrinks">
 		<int:queue capacity="10"/>
 	</int:channel>
-	<int:service-activator input-channel="hotDrinks" ref="barista" method="prepareHotDrink" output-channel="preparedDrinks"/>
+	<int:service-activator input-channel="hotDrinks" ref="barista" method="prepareHotDrink" output-channel="preparedItems"/>
 
-	<!-- drink order items are aggregated in a call to the waiter -->
-	<int:channel id="preparedDrinks"/>
-	<int:aggregator input-channel="preparedDrinks"  method="prepareDelivery" output-channel="deliveries">
+
+    <int:channel id="bites">
+        <int:queue capacity="10"/>
+    </int:channel>
+    <int:service-activator input-channel="bites" ref="chef" method="prepareSandwich" output-channel="preparedItems"/>
+
+
+	<!-- order items are aggregated in a call to the waiter -->
+	<int:channel id="preparedItems"/>
+	<int:aggregator input-channel="preparedItems"  method="prepareDelivery" output-channel="deliveries">
 		<beans:bean class="org.springframework.integration.samples.cafe.xml.Waiter"/>
 	</int:aggregator>
+
 
 	<int:channel id="deliveries">
 		<int:interceptors>
@@ -124,6 +141,13 @@
 	</beans:bean>
 
 	<beans:bean id="barista" class="org.springframework.integration.samples.cafe.xml.Barista"/>
+
+    <beans:bean id="chef" class="org.springframework.integration.samples.cafe.xml.Chef"/>
+
+	<beans:bean id="myRouter" class="org.springframework.integration.samples.cafe.MyRouter">
+		<beans:property name="drinks" ref="drinks" />
+		<beans:property name="bites" ref="bites" />
+	</beans:bean>
 
 	<int:poller id="poller" default="true" fixed-delay="1000"/>
 

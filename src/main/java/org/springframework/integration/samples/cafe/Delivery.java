@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author Gunnar Hillert
  */
 @XmlRootElement(name="Delivery")
-@XmlType(propOrder={"orderNumber","deliveredDrinks"})
+@XmlType(propOrder={"orderNumber","deliveredItems"})
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Delivery implements Serializable{
 
@@ -40,9 +40,9 @@ public class Delivery implements Serializable{
 
 	private static final String SEPARATOR = "YYYYYYYYYYYYYYYYYYYYYYYYYYY";
 
-	@XmlElement(name="Drink")
-	@XmlElementWrapper(name = "drinks")
-	private List<Drink> deliveredDrinks;
+	@XmlElement(name="Item")
+	@XmlElementWrapper(name = "items")
+	private List<OrderItem> deliveredItems;
 
 	@XmlElement
 	private int orderNumber;
@@ -50,10 +50,10 @@ public class Delivery implements Serializable{
 	// Default constructor required by Jackson Java JSON-processor
 	public Delivery() {}
 
-	public Delivery(List<Drink> deliveredDrinks) {
-		assert(deliveredDrinks.size() > 0);
-		this.deliveredDrinks = deliveredDrinks;
-		this.orderNumber = deliveredDrinks.get(0).getOrderNumber();
+	public Delivery(List<OrderItem> deliveredItems) {
+		assert(deliveredItems.size() > 0);
+		this.deliveredItems = deliveredItems;
+		this.orderNumber = deliveredItems.get(0).getOrderNumber();
 	}
 
 
@@ -65,20 +65,20 @@ public class Delivery implements Serializable{
 		this.orderNumber = orderNumber;
 	}
 
-	public List<Drink> getDeliveredDrinks() {
-		return deliveredDrinks;
+	public List<OrderItem> getDeliveredItems() {
+		return deliveredItems;
 	}
 
-	public void setDeliveredDrinks(List<Drink> deliveredDrinks) {
-		this.deliveredDrinks = deliveredDrinks;
+	public void setDeliveredItems(List<OrderItem> deliveredItems) {
+		this.deliveredItems = deliveredItems;
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer("\n" + SEPARATOR + "\n");
 		buffer.append("Order #" + getOrderNumber() + " has been delivered\n");
-		for (Drink drink : getDeliveredDrinks()) {
-			buffer.append(drink);
+		for (OrderItem item : getDeliveredItems()) {
+			buffer.append(item);
 			buffer.append("\n");
 		}
 		buffer.append(SEPARATOR + "\n");
