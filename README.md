@@ -20,7 +20,9 @@ See the parent-level **README.md** for more details, but the flow of the impleme
 
 The example comes with two identical configurations. One is ANNOTATION-based another is XML-based
 
-To run this sample simply execute the CafeDemoApp classes in the **org.springframework.integration.samples.cafe.xml** or  **org.springframework.integration.samples.cafe.annotation** package.
+To run this sample simply execute the CafeDemoApp class in the **org.springframework.integration.samples.cafe.xml** package.
+
+Watch the cafe orders being services in the console output of the program.
 
 See the configuration files in the **META-INF/spring/integration** path.
 
