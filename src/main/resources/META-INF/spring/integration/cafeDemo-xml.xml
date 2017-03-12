@@ -81,21 +81,23 @@
 	
 	<int:channel id="XMLDeliveries" />
 	<int-jms:outbound-channel-adapter channel="XMLDeliveries" destination-name="cafe.deliveries"></int-jms:outbound-channel-adapter>
-	
 
 
+
+	<!-- This Starts and ActiveMQ Broker.
+		 Uncomment if you do not have an external broker to connect to.
 	<amq:broker brokerName="cafe-broker">
 		<amq:transportConnectors>
 			<amq:transportConnector name="openwire" uri="tcp://localhost:61616"/>
 		</amq:transportConnectors>
-
-		<amq:destinations>
-			<amq:queue name="cafe.deliveries" physicalName="cafe.deliveries" />	
-		</amq:destinations>
 		<amq:plugins>
 			<amq:statisticsBrokerPlugin/>
 		</amq:plugins>
+		<amq:destinations>
+			<amq:queue name="cafe.deliveries" physicalName="cafe.deliveries"/>
+		</amq:destinations>
 	</amq:broker>
+	-->
 	
 	<!-- Set up the connection factory. You must name the bean "connectionFactory" for the JMS-backed
 	channels to automatically find it. Otherwise, you must specify the connection when you declare the
